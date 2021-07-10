@@ -1,11 +1,37 @@
-import React, { ReactElement, useState } from "react"
+import React, { ReactElement, useState, useEffect } from "react"
+import localforage from "localforage"
 
-import { LabeledInput } from "../components"
+import type { Person } from '../types/person'
+
+import { LabeledInput, Loading } from "../components"
 import { initialPerson } from "../utils"
+
+
+function savePerson(person: Person | null ) {
+  console.log('Saving', person)
+  localforage.setItem('person', person)
+}
 
 export function PersonEditor(): ReactElement {
   // const person = initialPerson
-  const [person, setPerson] = useState(initialPerson);
+  const [person, setPerson] = useState<Person | null>(null);
+
+  useEffect(() => {
+    const getPerson = async () => {
+      const person = await localforage.getItem<Person>("person");
+      setPerson(person ?? initialPerson);
+    }
+
+    getPerson();
+  }, [])
+
+  useEffect(() => {
+    savePerson(person)
+  }, [person])
+
+  if (!person) {
+    return <Loading />
+  }
 
   return (
     <form
@@ -31,7 +57,7 @@ export function PersonEditor(): ReactElement {
         label="Surname:"
         value={person.surname}
         onChange={(e) => {
-          setPerson((state) => ({ ...state, firstname: e.target.value}));
+          setPerson((person) => ({ ...person!, firstname: e.target.value}));
         }}
       />
       <LabeledInput
