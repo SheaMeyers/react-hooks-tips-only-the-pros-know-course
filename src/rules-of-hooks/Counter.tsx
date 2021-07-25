@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useEffect, useState } from "react"
+import React, { ReactElement, useRef, useEffect, useState, useLayoutEffect } from "react"
 
 export function Counter(): ReactElement {
   const [counter, setCounter] = useState(0)
@@ -8,6 +8,12 @@ export function Counter(): ReactElement {
     setTimeout(() => {
       button.current?.focus()
     }, 1000)
+  }, [])
+
+  useLayoutEffect(() => {
+    if (button.current) {
+      button.current.style.backgroundColor = "green"
+    }
   }, [])
 
   return (
