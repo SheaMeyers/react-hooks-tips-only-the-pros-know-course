@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, SetStateAction, useReducer } from "react"
+import { useState, useEffect, useCallback, SetStateAction, useReducer, useMemo } from "react"
 import localforage from "localforage"
 
 import type { Person } from '../types/person'
@@ -29,6 +29,10 @@ export function usePerson(initialPerson: Person) {
         })
     const isMounted = useIsMounted()
 
+    const firstAndSurName = useMemo(() => ({
+        firstname: person?.firstname,
+        surname: person?.surname,
+    }), [person?.firstname, person?.surname])
 
     useEffect(() => {
         const getPerson = async () => {
@@ -46,12 +50,13 @@ export function usePerson(initialPerson: Person) {
         getPerson();
     }, [initialPerson, isMounted])
 
-    const [, setNow] = useState(new Date())
-    
-    useEffect(() => {
-        const handle = setInterval(() => setNow(new Date()), 1500)
-        return () => clearInterval(handle)
-    })
+    // const [, setNow] = useState(new Date())
+    // useEffect(() => {
+    //     const handle = setInterval(() => setNow(new Date()), 1500)
+    //     return () => clearInterval(handle)
+    // })
+
+
 
     const saveFn = useCallback(() => {
         savePerson(person)
