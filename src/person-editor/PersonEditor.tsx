@@ -7,7 +7,7 @@ import { usePerson } from "./usePerson"
 
 
 export function PersonEditor(): ReactElement {
-  const [person, setPerson, { isDirty, isValid }] = usePerson(initialPerson)
+  const [person, setProperty, SetProperties, { isDirty, isValid }] = usePerson(initialPerson)
   const input = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -38,14 +38,24 @@ export function PersonEditor(): ReactElement {
             ...person,
             firstname: e.target.value,
           }
-          setPerson(newPerson);
+          // setPerson(newPerson);
+          setProperty("firstname", e.target.value)
+          if (e.target.value === "Ford") {
+            SetProperties({
+              surname: "Prefect",
+              address: "Outer space",
+              email: " ",
+              phone: " ",
+            })
+          }
         }}
       />
       <LabeledInput
         label="Surname:"
         value={person.surname}
         onChange={(e) => {
-          setPerson((person) => ({ ...person!, firstname: e.target.value}));
+          // setPerson((person) => ({ ...person!, firstname: e.target.value}));
+          setProperty("surname", e.target.value)
         }}
       />
       <LabeledInput
@@ -53,7 +63,8 @@ export function PersonEditor(): ReactElement {
         value={person.email}
         onChange={(e) => {
           const newPerson = { ...person, email: e.target.value }
-          setPerson(newPerson);
+          // setPerson(newPerson);
+          setProperty("email", e.target.value)
         }}
       />
       <LabeledInput
@@ -61,7 +72,8 @@ export function PersonEditor(): ReactElement {
         value={person.address}
         onChange={(e) => {
           const newPerson = { ...person, address: e.target.value }
-          setPerson(newPerson);
+          // setPerson(newPerson);
+          setProperty("address", e.target.value)
         }}
       />
       <LabeledInput
@@ -69,7 +81,8 @@ export function PersonEditor(): ReactElement {
         value={person.phone}
         onChange={(e) => {
           const newPerson = { ...person, phone: e.target.value }
-          setPerson(newPerson);
+          // setPerson(newPerson);
+          setProperty("phone", e.target.value)
         }}
       />
       <hr />
